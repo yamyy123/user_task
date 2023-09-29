@@ -1,0 +1,23 @@
+syntax ="proto3";
+
+option go_package = "github.com/yamyy123/newproject";
+
+package proto;
+
+service User{
+    rpc Adduser(AddRequest) returns (AddResponse);
+}
+
+message AddRequest{
+    string name=1;
+    string email=2;
+    string password=3;
+    string dob=4;
+    int64 phone=5;
+    repeated string role=6;
+    string status =7;
+}
+
+message AddResponse{
+    string response=1;
+}
