@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
 	Adduser(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	UpdateRole(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*AddResponse, error)
 }
 
 type userClient struct {
@@ -42,11 +43,21 @@ func (c *userClient) Adduser(ctx context.Context, in *AddRequest, opts ...grpc.C
 	return out, nil
 }
 
+func (c *userClient) UpdateRole(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*AddResponse, error) {
+	out := new(AddResponse)
+	err := c.cc.Invoke(ctx, "/proto.User/UpdateRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServer is the server API for User service.
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility
 type UserServer interface {
 	Adduser(context.Context, *AddRequest) (*AddResponse, error)
+	UpdateRole(context.Context, *UpdateRequest) (*AddResponse, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedUserServer struct {
 
 func (UnimplementedUserServer) Adduser(context.Context, *AddRequest) (*AddResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Adduser not implemented")
+}
+func (UnimplementedUserServer) UpdateRole(context.Context, *UpdateRequest) (*AddResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateRole not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 
@@ -88,6 +102,24 @@ func _User_Adduser_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _User_UpdateRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServer).UpdateRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.User/UpdateRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServer).UpdateRole(ctx, req.(*UpdateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // User_ServiceDesc is the grpc.ServiceDesc for User service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var User_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Adduser",
 			Handler:    _User_Adduser_Handler,
+		},
+		{
+			MethodName: "UpdateRole",
+			Handler:    _User_UpdateRole_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

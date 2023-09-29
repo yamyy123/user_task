@@ -6,6 +6,7 @@ package proto;
 
 service User{
     rpc Adduser(AddRequest) returns (AddResponse);
+    rpc UpdateRole(UpdateRequest)returns (AddResponse);
 }
 
 message AddRequest{
@@ -20,4 +21,9 @@ message AddRequest{
 
 message AddResponse{
     string response=1;
+}
+
+message UpdateRequest{
+    string name=1;
+    repeated string role=2;
 }

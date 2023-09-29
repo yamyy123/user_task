@@ -9,3 +9,8 @@ type User struct {
 	Role     []string `json:"role" bson:"role"`
 	Status   string   `json:"status" bson:"status"`
 }
+
+type Rolerequest struct{
+	Name string `json:"name" bson:"name"`
+	Role []string `json:"role" bson:"role"`
+}

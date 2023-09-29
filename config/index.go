@@ -26,12 +26,13 @@ if err:=mongoClient.Ping(ctx,readpref.Primary());err!=nil{
          log.Fatal(err.Error())
 		 return nil,err
 }
-
+fmt.Println("database has been connected")
 return mongoClient,nil
 }
 
 func Getcollection(client *mongo.Client,dbname string,collectionname string)(*mongo.Collection){
      collection:=client.Database(dbname).Collection(collectionname)
+	 fmt.Println(collection)
 	 return collection
 }
 

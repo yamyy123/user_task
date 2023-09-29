@@ -15,7 +15,7 @@ import (
 
 func inituser(client *mongo.Client)(){
         ctx:=context.TODO()
-		usercollection :=config.Getcollection(client, constants.ConnectionString, "user")
+		 usercollection :=config.Getcollection(client,constants.DatabaseName,"users")
         controller.UserService = service.NewUserServiceInit(ctx, usercollection)
 }
 

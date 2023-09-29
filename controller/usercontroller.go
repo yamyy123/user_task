@@ -36,3 +36,19 @@ func(u *RPCserver)Adduser(ctx context.Context,req *pb.AddRequest)(*pb.AddRespons
 		Response: result,
 	},nil
 }
+
+func(u *RPCserver)UpdateRole(ctx context.Context,req *pb.UpdateRequest)(*pb.AddResponse,error){
+	updatereq:=&models.Rolerequest{
+		Name: req.Name,
+		Role: req.Role,
+	}
+	result,err:=UserService.UpdateRole(updatereq)
+	if err!=nil{
+		return &pb.AddResponse{
+			Response: "failure",
+		},err
+	}
+	return &pb.AddResponse{
+		Response : result,
+	},nil
+}

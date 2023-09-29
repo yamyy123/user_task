@@ -19,6 +19,7 @@ func main() {
 	}
 	defer conn.Close()
 	client := pb.NewUserClient(conn)
+	//r.Static("/static", "./")
 	r.POST("/add", func(c *gin.Context) {
 		var request pb.AddRequest
 		if err := c.ShouldBindJSON(&request); err != nil {
@@ -26,6 +27,20 @@ func main() {
 			return
 		}
 		res, err := client.Adduser(context.TODO(), &request)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"message": res.Response})
+	})
+
+	r.POST("/update",func(c *gin.Context){
+		var request pb.UpdateRequest
+		if err := c.ShouldBindJSON(&request); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		res, err := client.UpdateRole(context.TODO(), &request)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
